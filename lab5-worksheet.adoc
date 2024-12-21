@@ -1,0 +1,151 @@
+:lang: en
+:source-highlighter: pygments
+:icons: font
+:xrefstyle: short
+
+
+=== https://www.cs.swarthmore.edu/~chaganti/cs88/s24[CS88] Lab-Checkpoint https://www.cs.swarthmore.edu/~chaganti/cs88/s24/labs/lab5.html[Lab 5: Network Security: Packet Sniffing]
+
+
+=== Task 2: Simple Hello World
+
+* In your `hello_world_client` program which IP and port number are you connected to?
+        
+For first part:
+    IP: 127.0.0.1
+    Port: 9090
+    
+For second part:
+    IP: 10.9.0.6
+    Port: 9090
+    
+   
+* In your `hello_world_server` program which IP and port number are you connected to?
+
+    IP: 0.0.0.0
+    PORT: 9090
+    
+    
+* Why does the client program not specify a binding to a local port number?
+
+
+    Because we are not communicating with a local port, we need the IP of the server we're communicating with
+    
+    
+    
+* Once you have completed the client and server code, send the packet from the client to 
+  the server. What are the three packets that you see traversing the network?
+    
+    
+    <REQUEST> The first packet contains "Who has 10.9.0.6? Tell 10.9.0.1" with the ARP from the MAC Address 02:42:00:92:50:f8. This packet is broadcast, meaning it's not sent to a specific destination. The Source is the MAC address of the requesting machine. 
+    
+    
+    <RESPONSE> The second packet contains "10.9.0.6 is at 02:42:0a:09:00:06" with the ARP from 02:42:0a:09:00:06 (responding machine's MAC Address) to 02:42:00:92:50:f8 (the machine that broadcast the original packet). It is telling the previous machine that it has the IP address that was requested.
+    
+    
+    <MESSAGE> The last packet contains the message "Hello, World!" with the UDP protocol from the IP address 10.9.0.1 to 10.9.0.6. This is just the message being sent from the client to the end host. 
+
+
+* List your responses to the following commands running on the CS machines:
++
+```
+$ hostname
+
+
+  cream 
+  
+  
+$ hostname -d
+
+
+  cs.swarthmore.edu
+  
+  
+$ hostname -f
+
+
+  cream.cs.swarthmore.edu
+
+$ hostname -i
+
+
+  130.58.68.142
+  
+  
+```
+
+=== Task 3: Sniff and Spoof Packets
+
+==== Sniffing Packets
+
+* Go through the code in `sniff_packets.py` and describe the filters we have setup for 
+  this task. Specifically, state the network interface, or iface we are using and what 
+  the filter we have set corresponds to [ICMP, IP, etc]
+  
+  The iface we are using is enp0s3. The filter correspondes to the ICMP protocol.
+
+* Describe in a sentence or two, the role of ICMP packets. 
+
+
+        ICMP packets are used to test network connections, helping to report errors and see if certain endhosts are reachable.
+        An example is a ping, where a device sends a echo request, and the receiving device sends a reply.
+        
+
+==== Sniffing and Spoofing.
+
+Answer the following questions after you run `sniff_spoof_icmp.py`. 
+
+* Write your responses you see on the echo client when you call ping `1.2.3.4`. 
+  Record your responses as observed in wireshark and the terminal seperately. 
+
+
+        root@029ddc01a587:/# ping 1.2.3.4
+        PING 1.2.3.4 (1.2.3.4) 56(84) bytes of data.
+        64 bytes from 1.2.3.4: icmp_seq=1 ttl=64 time=83.2 ms
+        64 bytes from 1.2.3.4: icmp_seq=2 ttl=64 time=19.6 ms
+        64 bytes from 1.2.3.4: icmp_seq=3 ttl=64 time=25.0 ms
+        64 bytes from 1.2.3.4: icmp_seq=4 ttl=64 time=20.3 ms
+        ^C
+        --- 1.2.3.4 ping statistics ---
+        4 packets transmitted, 4 received, 0% packet loss, time 3009ms
+        rtt min/avg/max/mdev = 19.569/37.032/83.234/26.757 ms
+
+
+        Echo (ping) request from 10.9.0.6 to 1.2.3.4 
+        ^ this is from the ping command that we did, pinging 1.2.3.4
+        Echo (ping) reply from 1.2.3.4 to 10.9.0.6
+        ^ this is our spoofed packet response to 10.9.0.6
+        
+        this is repeated for each ping that went through, with the sequence incrementing each time and ttl being \
+        64 each time.
+        
+        
+        
+* What response do you see **in wireshark** from the server when you call ping `8.8.8.8`? If you notice 
+   any duplicate responses, where do you think they originate from? 
+        Echo (ping) request from 10.9.0.6 to 8.8.8.8 
+                ^ this is from our ping command
+        Echo (ping) reply from 8.8.8.8 to 10.9.0.6
+        Echo (ping) reply from 8.8.8.8 to 10.9.0.6
+        
+        
+        One of the replies is from us, while the other is from the true owner of 8.8.8.8 (Google).
+        
+        This is repeated for each ping command.
+        
+        
+
+**  Based on the responses you see in the previous question, can you tell the two responses apart?
+  (HINT: is there a field that you set in ICMP that you can identify in the response?)
+  
+        Yes. The ones that have a TTL of 99 is ours, while the ones that have a TTL of 112 is Google's.
+        For the one we looked at first, ours arrived first, and Google's second.
+
+** Which of the two ICMP responses arrives faster at the client? If it varies, 
+   what factors do you think contribute to this variation?
+        
+        The order seems to vary. Out of about 12 trials, Google was first for the majority. 
+        One of the factors may be things that are completely out of our control, like the speed of how the packets travel in the network
+        to their destination, which will be different every time. Another factor may be how many layers removed Google's server
+        is from the source compared to how fast it is to observe a packet sent on the wire and construct/send a spoofed packet.
+

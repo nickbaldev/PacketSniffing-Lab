@@ -1,0 +1,100 @@
+:lang: en
+:source-highlighter: pygments
+:icons: font
+:xrefstyle: short
+
+
+=== https://www.cs.swarthmore.edu/~chaganti/cs88/s24[CS88] Lab-Checkpoint https://www.cs.swarthmore.edu/~chaganti/cs88/s24/labs/lab5.html[Lab 5: Network Security: Packet Sniffing]
+
+=== Task 1A: Understanding the Internet Five-Layer Model
+Use the following references to answer the worksheet questions:
+
+
+* https://book.systemsapproach.org/internetworking/basic-ip.html?highlight=internet%20protocol#internet-ip[Network Protocol, IP]
+
+* https://youtu.be/olbr3WZwrdU?t=576[Network Service Model]
+
+* https://book.systemsapproach.org/internetworking/basic-ip.html?highlight=atm#packet-format[IP Packet Format]
+
+. What we mean by the Internet?
+
+
+    A collection of connected networks which transfer packets to one another.
+    
+    
+. What is the service model that the Internet offers? List one scenario where this service model is advantageous and one where it is not.
+
+    
+  The Internet provides a "best effort" service model. It is advantageous because it is simple, but there are no guarantees of delivery.
+  
+  
+
+. Describe the following fields in the IP header `Version`,`TTL`,`Protocol`, `Checksum`, `SourceAddr`, 
+  `DestinationAddr`, and `Data`. NOTE: You are asked to describe what these fields correspond to, **not**
+  to give the values for each of these fields in the packet you are currently observing. 
+
+
+    Version: The version of IP
+    TTL: "Time to live", helps us identify packets that should be discarded.
+    Protocol: The protocol which the IP packet should be passed to.
+    Checksum: Acts as an identifier for the IP packet. If a bit is changed, it will not pass the test, so it will be discarded.
+    SourceAddr: Address of source, helps End host decide if they want to accept packets.
+    DestinationAddr: Address of destination, allows routers to know where to send the packets.
+    Data: The contents of the packets.
+    
+
+
+=== Task 1B: Network Forensics
+
+* Record your responses for the Warm-up exercise
+
+** Which IP address received the most packets?
+
+A:  10.5.5.205
+
+B: 47.16.19.220
+
+C: 206.151.144.244
+
+D: 232.165.54.255 <---
+
+
+Out of these 4, D received the most
+
+** Which IP address sent the fewest packets?
+
+  
+  14.93.78.40
+  
+  
+** Which IP address sent the most bytes?
+
+  
+  32.185.95.242
+  
+  
+* Record your responses for Adventure A
+
+** Investigate the capture, find a data exfil method, recover the data, and  
+   reconstruct the original contents. Find a 12-character hex string. 
+   Hint: If it’s not TCP, and it’s not UDP, it’s probably....
+
+  0x54ff b171 ee9d
+
+* Record your responses for Adventure B
+
+** An attacker is targeting Trendnet equipment on your network. Find the address of the 
+   equipment that was successfully exploited. Hint:https://paper.bobylive.com/Meeting_Papers/BlackHat/USA-2013/US-13-Heffner-Exploiting-Network-Surveillance-Cameras-Like-A-Hollywood-Hacker-Slides.pdf[Look at this talk].
+   
+   
+   Attacker: 10.150.109.181 
+   Camera: 10.76.92.120
+   
+
+* Record your responses for Adventure C
+
+** Investigate the capture, find a data exfil method, recover the data, and 
+   reconstruct the original contents. Find a 12-character hex string. Hint: UDP 53
+
+
+  a179c27b6902

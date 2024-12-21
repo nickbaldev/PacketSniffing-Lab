@@ -1,0 +1,22 @@
+Lab 5 Checkpoint  Totalpoints: 1 
+Score: 1 
+Lab 5 Worksheet Totalpoints: 1 
+Score: 1 
+Wireshark Warm-Up and Adventure A  Totalpoints: 1 
+Score: 1 
+Adventure B  Totalpoints: 0.5 
+Score: 0.5 
+Adventure C Totalpoints: 0.5 
+Score: 0.5 
+Writing hello world client and server programs Totalpoints: 1 
+Score: 1 
+sniff packets Totalpoints: 1 
+Score: 1 
+sniff tcp packets Totalpoints: 1 
+Score: 1 
+sniff and spoof icmp packets Totalpoints: 1 
+Score: 1 
+Total points Totalpoints: 8 
+Score: 8 
+Notes 
+well done!
